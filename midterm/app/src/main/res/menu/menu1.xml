@@ -1,0 +1,40 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <group android:checkableBehavior="single" >
+        <item
+            android:id="@+id/itemLine"
+            android:checked="true"
+            android:title="선 그리기" />
+        <item
+            android:id="@+id/itemCircle"
+            android:title="원 그리기" />
+        <item
+            android:id="@+id/itemRect"
+            android:title="사각형 그리기" />
+    </group>
+
+    <item android:title="색상 변경 >>">
+        <menu>
+            <item
+                android:id="@+id/itemRed"
+                android:title="빨강" />
+            <item
+                android:id="@+id/itemGreen"
+                android:title="초록" />
+            <item
+                android:id="@+id/itemBlue"
+                android:title="파랑" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/itemSetting"
+        android:title="설정 (체크박스 대화상자)" />
+    <item
+        android:id="@+id/itemSignup"
+        android:title="회원가입" />
+    <item
+        android:id="@+id/itemLogout"
+        android:title="로그아웃" />
+
+</menu>

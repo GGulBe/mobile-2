@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/ctxUndo"
+        android:title="마지막 도형 취소" />
+    <item
+        android:id="@+id/ctxClear"
+        android:title="모두 지우기" />
+    <item
+        android:id="@+id/ctxColor"
+        android:title="색상 선택 (라디오 대화상자)" />
+
+</menu>
