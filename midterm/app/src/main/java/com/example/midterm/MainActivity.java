@@ -20,6 +20,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
     TextView tvUser;
     CheckBox chkFill, chkBold;
     Button btnLogin;
+    RadioGroup rgColor;
+    RadioButton[] rdoColor = new RadioButton[3];
+    final static String[] colorNames = { "빨강", "초록", "파랑" };
+    final static int[] colors = { Color.RED, Color.GREEN, Color.BLUE };
     View dialogView;
     MyGraphicView graphicView;
 
@@ -56,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
         chkFill = (CheckBox) findViewById(R.id.chkFill);
         chkBold = (CheckBox) findViewById(R.id.chkBold);
         btnLogin = (Button) findViewById(R.id.btnLogin);
+        rgColor = (RadioGroup) findViewById(R.id.rgColor);
+        rdoColor[0] = (RadioButton) findViewById(R.id.rdoRed);
+        rdoColor[1] = (RadioButton) findViewById(R.id.rdoGreen);
+        rdoColor[2] = (RadioButton) findViewById(R.id.rdoBlue);
 
         LinearLayout pictureLayout = (LinearLayout) findViewById(R.id.pictureLayout);
         graphicView = new MyGraphicView(this);
@@ -70,6 +80,13 @@ public class MainActivity extends AppCompatActivity {
         chkBold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 bold = isChecked;
+            }
+        });
+
+        // 화면의 라디오버튼 = 현재 색상 (메뉴·대화상자도 이 라디오버튼을 바꿈)
+        rgColor.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                curColor = colors[getColorIndex()];
             }
         });
 
@@ -104,8 +121,13 @@ public class MainActivity extends AppCompatActivity {
                 String id = dlgId.getText().toString().trim();
                 String pw = dlgPw.getText().toString().trim();
 
+                // 저장된 데이터와 일치하는지 확인 → 결과를 메시지창으로
                 String realPw = findPw(id);
-                if (realPw != null && realPw.equals(pw)) {
+                if (realPw == null) {
+                    showMessage("로그인 실패", "없는 아이디입니다: " + id + "\n(한/영 확인)", reopenLogin);
+                } else if (!realPw.equals(pw)) {
+                    showMessage("로그인 실패", "비밀번호가 일치하지 않습니다", reopenLogin);
+                } else {
                     loginUser = id;
                     tvUser.setText(id + " 님 로그인됨");
                     btnLogin.setText("다시 로그인");
@@ -113,11 +135,8 @@ public class MainActivity extends AppCompatActivity {
                         writeFile("saved_id.txt", id, Context.MODE_PRIVATE);
                     else
                         deleteFile("saved_id.txt");
-                    Toast.makeText(getApplicationContext(), id + " 환영합니다", Toast.LENGTH_SHORT).show();
-                    return;
+                    showMessage("로그인 성공", id + " 님, 아이디와 비밀번호가 일치합니다", null);
                 }
-                Toast.makeText(getApplicationContext(), "로그인 실패: " + id + " (한/영 확인)", Toast.LENGTH_LONG).show();
-                showLoginDialog();
             }
         });
         dlg.setNeutralButton("회원가입", new DialogInterface.OnClickListener() {
@@ -172,16 +191,34 @@ public class MainActivity extends AppCompatActivity {
                     msg = "이미 있는 아이디입니다";
 
                 if (msg != null) {
-                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                    showSignupDialog();
+                    showMessage("회원가입 실패", msg, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            showSignupDialog();
+                        }
+                    });
                     return;
                 }
                 writeFile("accounts.txt", id + "," + pw + "\n", Context.MODE_APPEND);
-                Toast.makeText(getApplicationContext(), id + " 가입 완료! 로그인하세요", Toast.LENGTH_SHORT).show();
-                showLoginDialog();
+                showMessage("회원가입 완료", id + " 님 가입 완료! 로그인하세요", reopenLogin);
             }
         });
         dlg.setNegativeButton("취소", null);
+        dlg.show();
+    }
+
+    // 메시지창의 확인을 누르면 로그인 대화상자를 다시 띄움
+    DialogInterface.OnClickListener reopenLogin = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+            showLoginDialog();
+        }
+    };
+
+    // ===== 메시지창: 확인 버튼만 있는 대화상자 (afterOk = 확인 누른 뒤 할 일, 없으면 null) =====
+    void showMessage(String title, String msg, DialogInterface.OnClickListener afterOk) {
+        AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
+        dlg.setTitle(title);
+        dlg.setMessage(msg);
+        dlg.setPositiveButton("확인", afterOk);
         dlg.show();
     }
 
@@ -230,12 +267,12 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.itemRect) {
             curShape = RECTANGLE;
             item.setChecked(true);
-        } else if (id == R.id.itemRed) {
-            curColor = Color.RED;
+        } else if (id == R.id.itemRed) {      // 메뉴 → 화면 라디오버튼
+            rdoColor[0].setChecked(true);
         } else if (id == R.id.itemGreen) {
-            curColor = Color.GREEN;
+            rdoColor[1].setChecked(true);
         } else if (id == R.id.itemBlue) {
-            curColor = Color.BLUE;
+            rdoColor[2].setChecked(true);
         } else if (id == R.id.itemSetting) {
             showSettingDialog();
         } else if (id == R.id.itemSignup) {
@@ -270,22 +307,31 @@ public class MainActivity extends AppCompatActivity {
         dlg.show();
     }
 
-    // ===== 대화상자 3: 라디오(단일 선택) =====
+    // 화면 라디오버튼 중 몇 번째가 선택됐는지 (0~2)
+    int getColorIndex() {
+        int checkedId = rgColor.getCheckedRadioButtonId();
+        for (int i = 0; i < rdoColor.length; i++)
+            if (rdoColor[i].getId() == checkedId) return i;
+        return 0;
+    }
+
+    // ===== 대화상자 3: 라디오(단일 선택) ↔ 화면의 RadioGroup 주고받기 =====
     void showColorDialog() {
-        final String[] colorNames = new String[] { "빨강", "초록", "파랑" };
-        final int[] colors = new int[] { Color.RED, Color.GREEN, Color.BLUE };
-        int checked = 0;
-        for (int i = 0; i < colors.length; i++)
-            if (colors[i] == curColor) checked = i;
+        final int[] selected = { getColorIndex() }; // 화면 라디오버튼 → 대화상자 처음 선택값
 
         AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
         dlg.setTitle("색상 선택");
-        dlg.setSingleChoiceItems(colorNames, checked, new DialogInterface.OnClickListener() {
+        dlg.setSingleChoiceItems(colorNames, selected[0], new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                curColor = colors[which];
+                selected[0] = which;
             }
         });
-        dlg.setPositiveButton("닫기", null);
+        dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                rdoColor[selected[0]].setChecked(true); // 대화상자 선택값 → 화면 라디오버튼
+            }
+        });
+        dlg.setNegativeButton("취소", null);
         dlg.show();
     }
 

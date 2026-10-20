@@ -17,11 +17,12 @@
 | 기능 | 코드 위치 | 교재 |
 |---|---|---|
 | 로그인 대화상자 (사용자 정의 뷰 `dialog_login.xml`) | `showLoginDialog()` | 예제 7-25~27 |
+| **아이디·비밀번호 일치 여부를 메시지창으로 확인** (없는 아이디 / 비밀번호 불일치 / 성공, 가입 결과도 메시지창) | `showMessage()` | 예제 7-16, 7-17 |
 | 아이디 저장 체크 → 파일 쓰기/읽기 | `writeFile()` / `readFile()` | 예제 8-2, 직접풀어보기 8-1 |
 | 회원가입 (로그인창 "회원가입" 버튼 / 옵션 메뉴) → `accounts.txt`에 `MODE_APPEND`로 추가 | `showSignupDialog()` / `findPw()` | 7장 대화상자 + 8장 파일 |
 | 옵션 메뉴 (XML `menu1.xml`, 그룹 단일선택 + 서브메뉴) | `onCreateOptionsMenu` / `onOptionsItemSelected` | 예제 7-2, 7-5, 직접풀어보기 7-1 |
 | 체크박스 대화상자 ↔ 화면 CheckBox 값 주고받기 | `showSettingDialog()` | 예제 7-20 |
-| 라디오(단일선택) 대화상자 | `showColorDialog()` | 예제 7-19 |
+| **라디오 대화상자 ↔ 화면 RadioGroup 주고받기** (화면에서 고른 색이 대화상자 처음 선택값, 대화상자에서 확인하면 화면 라디오버튼에 반영. 옵션 메뉴 색상도 같은 라디오버튼을 바꿈) | `showColorDialog()` / `getColorIndex()` | 예제 7-19 |
 | 확인/취소 대화상자 | `showLogoutDialog()` | 예제 7-17 |
 | 터치로 그리기 (선/원/사각형) | `MyGraphicView.onTouchEvent` / `onDraw` | 예제 9-5, 직접풀어보기 9-2 |
 | **터치(짧게 탭) → 메뉴 띄우기** | `onTouchEvent`의 `ACTION_UP` → `showContextMenu()` | 7장 컨텍스트 메뉴 + 9장 |
@@ -31,7 +32,7 @@
 - **`switch (item.getItemId()) { case R.id.xxx:` 에서 "Constant expression required" 에러**: 최신 Android Studio는 R.id가 상수가 아니에요. `if (id == R.id.xxx) ... else if` 로 바꾸면 됩니다. (`menu.add(0, 1, 0, "...")`처럼 숫자 ID를 쓰면 switch 그대로 써도 OK)
 - **로그인 눌러도 대화상자가 계속 다시 뜸**: 키보드가 한글 모드라 `user1`이 `ㅕㄴㄷㄱ1`로 입력된 것. 아이디 EditText에 `android:inputType="textVisiblePassword"`를 주면 영문으로 고정됨 (이미 적용).
 - **에뮬레이터가 클릭에 전혀 반응 없음**: 에뮬레이터 자체가 멈춘 것. Device Manager → ⋮ → Cold Boot Now.
-- **메뉴(⋮)가 안 보임**: `themes.xml` 부모가 `...NoActionBar`이면 액션바가 없어서 옵션 메뉴도 안 보여요. `Theme.Material3.DayNight`로 두세요.
+- **메뉴(⋮)가 안 보임**: `themes.xml` 부모가 `...NoActionBar`이면 액션바가 없어서 옵션 메뉴도 안 보여요. `Theme.Material3.DayNight`로 두세요. **`res/values-night/themes.xml`도 확인**하세요. 새 프로젝트는 여기가 `NoActionBar`라서 폰이 다크 모드일 때만 메뉴가 사라져요 (이 프로젝트는 파일을 지워서 해결).
 - **컨텍스트 메뉴가 안 뜸**: `registerForContextMenu(뷰)`를 빠뜨리지 않았는지 확인하세요.
 - **그림이 안 바뀜**: 값을 바꾼 뒤 `invalidate()`를 호출해야 다시 그려져요.
 - **checkable 메뉴의 체크 표시가 안 바뀜**: `item.setChecked(true)`를 직접 호출해야 해요.

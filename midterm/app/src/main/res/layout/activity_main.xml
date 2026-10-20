@@ -36,6 +36,32 @@
             android:text="로그인" />
     </LinearLayout>
 
+    <RadioGroup
+        android:id="@+id/rgColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/rdoRed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="빨강" />
+
+        <RadioButton
+            android:id="@+id/rdoGreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="초록" />
+
+        <RadioButton
+            android:id="@+id/rdoBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="파랑" />
+    </RadioGroup>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
