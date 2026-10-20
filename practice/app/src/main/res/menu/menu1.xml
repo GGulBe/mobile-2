@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/itemLogin"
+        android:title="로그인" />
+    <item
+        android:id="@+id/itemSignup"
+        android:title="회원가입" />
+
+    <item android:title="설정 >>">
+        <menu>
+            <item
+                android:id="@+id/itemColor"
+                android:title="펜 색상 (라디오)" />
+            <item
+                android:id="@+id/itemOption"
+                android:title="펜 옵션 (체크박스)" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/itemLogout"
+        android:title="로그아웃" />
+
+</menu>
