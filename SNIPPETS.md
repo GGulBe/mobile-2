@@ -980,6 +980,8 @@ public class MainActivity extends AppCompatActivity {
 | 증상 | 해결 |
 |---|---|
 | `constant expression required` | `switch (item.getItemId()) { case R.id.xxx:` → **if 문**으로 |
+| 새 프로젝트 빌드 실패 `checkDebugAarMetadata` · `Dependency 'androidx.core:core:1.19.1' requires … compileSdk 37` | 새 프로젝트 라이브러리가 설치된 SDK보다 새것. `gradle/libs.versions.toml`에서 `coreKtx = "1.19.1"` → `coreKtx = "1.17.0"` 으로 바꾸고 Sync (또는 SDK Manager에서 Android 37 설치) |
+| 실행하자마자 종료 · `ClassNotFoundException` · `import com.example….R;`이 자동으로 생김 | MainActivity 맨 위 `package com.example.프로젝트이름;` 줄이 지워졌거나 파일이 `java/com/example/프로젝트이름/` 폴더 밖에 있음 → package 줄 복구, 파일을 폴더 안으로 |
 | ⋮ 메뉴가 안 보임 | `values/themes.xml`, `values-night/themes.xml`의 `NoActionBar` 지우기 (0번) |
 | 앱이 켜지자마자 종료 | `R.id.main` EdgeToEdge 코드 지우기 (0번). 또는 findViewById한 id가 XML에 없는지 확인 |
 | 대화상자 EditText에서 앱 종료 | `findViewById` → `dialogView.findViewById` |

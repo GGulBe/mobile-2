@@ -31,6 +31,7 @@
 1. Android Studio → **New Project** → **Empty Views Activity** → Next
 2. Name `practice`, Language **Java**, Minimum SDK는 기본값 → Finish
 3. Gradle 동기화가 끝날 때까지 기다립니다(오른쪽 아래 진행 막대).
+4. ▶ Run 해서 빈 앱이 뜨는지 먼저 확인합니다. `checkDebugAarMetadata` 빌드 실패가 나면 [막혔을 때](#막혔을-때) 첫 줄대로 `coreKtx` 버전을 내립니다.
 
 ---
 
@@ -655,7 +656,8 @@ public class MainActivity extends AppCompatActivity {
 |---|---|
 | ⋮가 없음 | 2번 테마 (values-night 포함) |
 | `R.id.main` 빌드 에러 | MainActivity를 통째로 바꾸지 않아서 새 프로젝트의 EdgeToEdge 코드가 남아 있음 |
-| `package` 관련 에러 | MainActivity 맨 위 `package com.example.프로젝트이름;` 줄까지 지웠음 → 다시 써 넣기 |
+| 빌드 실패 `checkDebugAarMetadata` · `Dependency 'androidx.core:core:1.19.1' requires … compileSdk 37` | 새 프로젝트 라이브러리가 설치된 SDK보다 새것. `gradle/libs.versions.toml`에서 `coreKtx = "1.19.1"` → `coreKtx = "1.17.0"` 으로 바꾸고 Sync (또는 SDK Manager에서 Android 37 설치) |
+| 실행하자마자 종료 · `ClassNotFoundException` · `import com.example….R;`이 자동으로 생김 | MainActivity 맨 위 `package com.example.프로젝트이름;` 줄이 지워졌거나 파일이 `java/com/example/프로젝트이름/` 폴더 밖에 있음 → package 줄 복구, 파일을 폴더 안으로 |
 | `constant expression required` | `switch`에 `R.id.xxx` 사용 → if 문 |
 | 로그인 대화상자에서 종료 | `findViewById` 대신 `dialogView.findViewById` / dialog_login.xml의 id 오타 |
 | 로그인이 계속 실패 | 한글 입력 / `==` 대신 `equals` |
