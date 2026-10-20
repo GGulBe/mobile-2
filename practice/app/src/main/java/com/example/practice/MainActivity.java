@@ -59,19 +59,19 @@ public class MainActivity extends AppCompatActivity {
         chkFill = (CheckBox) findViewById(R.id.chkFill);
         pictureLayout = (LinearLayout) findViewById(R.id.pictureLayout);
 
-        // [G-2] 처음 실행이면 계정 3개를 파일에 저장
+        // 처음 실행이면 계정 3개를 파일에 저장
         if (readMembers().equals("")) {
             writeMember("user1", "1111");
             writeMember("user2", "2222");
             writeMember("user3", "3333");
         }
-        // [J-1] 화면 라디오버튼이 바뀌면 펜 색상 저장
+        // 화면 라디오버튼이 바뀌면 펜 색상 저장
         rgColor.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 curColor = colors[getColorIndex()];
             }
         });
-        // [K-1] 화면 체크박스가 바뀌면 펜 옵션 저장
+        // 화면 체크박스가 바뀌면 펜 옵션 저장
         chkBold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 bold = isChecked;
@@ -82,14 +82,14 @@ public class MainActivity extends AppCompatActivity {
                 fill = isChecked;
             }
         });
-        // [L-1] 회색 영역(pictureLayout)에 그림판 붙이기
+        // 회색 영역(pictureLayout)에 그림판 붙이기
         graphicView = new MyGraphicView(this);
         pictureLayout.addView(graphicView);
-        // [M-1] 그림판에 컨텍스트 메뉴 등록 (빠뜨리면 메뉴 안 뜸)
+        // 그림판에 컨텍스트 메뉴 등록 (빠뜨리면 메뉴 안 뜸)
         registerForContextMenu(graphicView);
     }
 
-    // ===== [E] 옵션 메뉴 =====
+    // ===== 옵션 메뉴 =====
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-    // ===== [F] 메시지창 : 확인 버튼만 있는 대화상자 =====
+    // ===== 메시지창 : 확인 버튼만 있는 대화상자 =====
     void showMessage(String title, String msg) {
         AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
         dlg.setTitle(title);
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         dlg.setPositiveButton("확인", null);
         dlg.show();
     }
-    // ===== [G] 파일 처리 : members.txt 에 한 줄씩 "아이디,비밀번호" =====
+    // ===== 파일 처리 : members.txt 에 한 줄씩 "아이디,비밀번호" =====
     // 파일 끝에 이어 쓰기 (MODE_PRIVATE 로 쓰면 덮어써서 기존 회원이 사라짐)
     void writeMember(String id, String pw) {
         try {
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return null;
     }
-    // ===== [H] 로그인 : 사용자 정의 대화상자 + 파일 데이터와 비교 + 메시지창 =====
+    // ===== 로그인 : 사용자 정의 대화상자 + 파일 데이터와 비교 + 메시지창 =====
     void showLoginDialog() {
         View dialogView = (View) View.inflate(MainActivity.this, R.layout.dialog_login, null);
         // 대화상자 안 위젯은 dialogView.findViewById 로!
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         dlg.show();
     }
 
-    // ===== [H] 로그아웃 : 확인/취소 대화상자 =====
+    // ===== 로그아웃 : 확인/취소 대화상자 =====
     void showLogoutDialog() {
         AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
         dlg.setTitle("로그아웃");
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         dlg.setNegativeButton("취소", null);
         dlg.show();
     }
-    // ===== [I] 회원가입 : 중복 확인 후 파일에 추가 =====
+    // ===== 회원가입 : 중복 확인 후 파일에 추가 =====
     void showSignupDialog() {
         View dialogView = (View) View.inflate(MainActivity.this, R.layout.dialog_login, null);
         final EditText dlgId = (EditText) dialogView.findViewById(R.id.dlgId);
@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
         dlg.setNegativeButton("취소", null);
         dlg.show();
     }
-    // ===== [J] 라디오 =====
+    // ===== 라디오 =====
     // 화면 라디오버튼 중 몇 번째가 선택됐는지 (0~2)
     int getColorIndex() {
         int checkedId = rgColor.getCheckedRadioButtonId();
@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
         dlg.setNegativeButton("취소", null);
         dlg.show();
     }
-    // ===== [K] 체크박스 목록 대화상자 ↔ 화면 체크박스 =====
+    // ===== 체크박스 목록 대화상자 ↔ 화면 체크박스 =====
     void showOptionDialog() {
         final String[] optArray = { "굵은 선", "채우기" };
         final boolean[] checkArray = { chkBold.isChecked(), chkFill.isChecked() };   // 화면 → 대화상자
@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
         dlg.setNegativeButton("취소", null);
         dlg.show();
     }
-    // ===== [M] 컨텍스트 메뉴 (그림판을 탭하면 뜸) =====
+    // ===== 컨텍스트 메뉴 (그림판을 탭하면 뜸) =====
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-    // ===== [L] 그림판 뷰 =====
+    // ===== 그림판 뷰 =====
     private static class MyGraphicView extends View {
         // 그린 원들 : {중심x, 중심y, 반지름, 색, 굵기(1/0), 채우기(1/0)}
         ArrayList<int[]> shapes = new ArrayList<int[]>();
@@ -348,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
                     stopX = (int) event.getX();
                     stopY = (int) event.getY();
                     dragging = false;
-                    // [M-2] 거의 안 움직였으면 = 탭 → 메뉴, 아니면 원 저장
+                    // 거의 안 움직였으면 = 탭 → 메뉴, 아니면 원 저장
                     if (Math.abs(stopX - startX) < 10 && Math.abs(stopY - startY) < 10)
                         this.showContextMenu();
                     else
